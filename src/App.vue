@@ -8,7 +8,7 @@
 
     <!-- ══════════ THE CONSOLE ══════════ -->
     <div class="console-card w-full h-full md:w-[720px] md:h-[90vh] md:max-h-[760px] md:rounded-2xl md:border md:border-vault-border/25 relative z-10 overflow-hidden flex flex-col transition-all duration-500">
-      <SpringToy />
+      <SpringToy v-if="config.setupDone" />
 
       <!-- ══════════ HEADER ══════════ -->
       <header class="flex-none flex items-center justify-between px-5 h-10 relative z-10 border-b border-vault-border/20">
