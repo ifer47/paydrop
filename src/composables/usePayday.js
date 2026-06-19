@@ -86,69 +86,27 @@ export function usePayday() {
     return countdown.value.total / 86400000
   })
 
-  // 情绪状态和文案
+  // 情绪状态（仅 level / emoji / color / intensity，文案由外层根据 i18n 填充）
   const moodInfo = computed(() => {
     const days = countdown.value.days
     const hours = countdown.value.hours
 
     if (countdown.value.total <= 0) {
-      return {
-        level: 'payday',
-        emoji: '🎉',
-        title: '发薪日到了！',
-        message: '今天是发薪日！去看看账户余额了！',
-        color: '#f0d080',
-        intensity: 1,
-      }
+      return { level: 'payday', emoji: '🎉', color: '#f0d080', intensity: 1, days, hours }
     }
     if (days === 0 && hours < 24) {
-      return {
-        level: 'tomorrow',
-        emoji: '🔥',
-        title: '明天就到了！！！',
-        message: `还有 ${hours} 小时，钱钱快来！`,
-        color: '#e8a838',
-        intensity: 0.95,
-      }
+      return { level: 'tomorrow', emoji: '🔥', color: '#e8a838', intensity: 0.95, days, hours }
     }
     if (days <= 3) {
-      return {
-        level: 'soon',
-        emoji: '✨',
-        title: '马上就到了',
-        message: `再熬 ${days} 天，梦想就要照进现实`,
-        color: '#c9a84c',
-        intensity: 0.85,
-      }
+      return { level: 'soon', emoji: '✨', color: '#c9a84c', intensity: 0.85, days, hours }
     }
     if (days <= 7) {
-      return {
-        level: 'close',
-        emoji: '💛',
-        title: '快了快了',
-        message: `只剩 ${days} 天，可以开始想买什么了`,
-        color: '#c9a84c',
-        intensity: 0.7,
-      }
+      return { level: 'close', emoji: '💛', color: '#c9a84c', intensity: 0.7, days, hours }
     }
     if (days <= 15) {
-      return {
-        level: 'mid',
-        emoji: '⚡',
-        title: '月中打工人',
-        message: `还有 ${days} 天，继续努力吧`,
-        color: '#b87333',
-        intensity: 0.5,
-      }
+      return { level: 'mid', emoji: '⚡', color: '#b87333', intensity: 0.5, days, hours }
     }
-    return {
-      level: 'far',
-      emoji: '🌑',
-      title: '路漫漫其修远兮',
-      message: `还有 ${days} 天，好好工作，好好生活`,
-      color: '#8a6d2a',
-      intensity: 0.3,
-    }
+    return { level: 'far', emoji: '🌑', color: '#8a6d2a', intensity: 0.3, days, hours }
   })
 
   // 是否是发薪日

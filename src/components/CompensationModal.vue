@@ -12,9 +12,9 @@
 
           <!-- Header -->
           <div class="text-center mb-6 flex-none">
-            <div class="text-vault-gold/60 text-xs font-body tracking-[0.3em] uppercase mb-1">COMPENSATION CALCULATOR</div>
-            <h2 class="font-display text-3xl gold-text">裁员赔偿计算器</h2>
-            <p class="text-[10px] font-body text-vault-muted mt-1">基于《中华人民共和国劳动合同法》标准设计</p>
+            <div class="text-vault-gold/60 text-xs font-body tracking-[0.3em] uppercase mb-1">{{ t('compSubtitle') }}</div>
+            <h2 class="font-display text-3xl gold-text">{{ t('compTitle') }}</h2>
+            <p class="text-[10px] font-body text-vault-muted mt-1">{{ t('compDesc') }}</p>
           </div>
 
           <!-- Scrollable Content -->
@@ -24,20 +24,20 @@
               <!-- ─── LEFT: INPUTS ─── -->
               <div class="space-y-4">
                 <div class="border-b border-vault-border/30 pb-2">
-                  <span class="text-xs font-body tracking-wider text-vault-gold">1. 基础薪资与社平</span>
+                  <span class="text-xs font-body tracking-wider text-vault-gold">{{ t('sectionSalary') }}</span>
                 </div>
 
                 <!-- 月平均工资 -->
                 <div>
                   <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">
-                    前12个月平均工资 (税前) <span class="text-vault-gold">*</span>
+                    {{ t('avgSalaryLabel') }} <span class="text-vault-gold">*</span>
                   </label>
                   <div class="relative">
                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-vault-gold font-body text-sm">{{ config.currency }}</span>
                     <input
                       v-model="salary"
                       type="number"
-                      placeholder="请输入月平均工资"
+                      :placeholder="t('avgSalaryPlaceholder')"
                       class="input-vault w-full rounded-lg pl-8 pr-4 py-2.5 font-body text-sm"
                     />
                   </div>
@@ -47,12 +47,12 @@
                 <div>
                   <div class="flex justify-between items-center mb-1.5">
                     <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase">
-                      当地上年度社平工资 (选填)
+                      {{ t('socialAvgLabel') }}
                     </label>
                     <span class="text-[9px] text-vault-gold/60 cursor-help group relative">
-                      [ 封顶规则 ]
+                      [ {{ t('capRule') }} ]
                       <span class="absolute bottom-full right-0 mb-1 w-48 p-2 bg-vault-dark border border-vault-border rounded text-[9px] text-vault-muted leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30 shadow-xl">
-                        若月薪超社平3倍，基数按3倍社平封顶，且补偿年限最高不超过12年。
+                        {{ t('capRuleDetail') }}
                       </span>
                     </span>
                   </div>
@@ -61,14 +61,14 @@
                     <input
                       v-model="socialAverage"
                       type="number"
-                      placeholder="用于计算3倍封顶限额"
+                      :placeholder="t('socialAvgPlaceholder')"
                       class="input-vault w-full rounded-lg pl-8 pr-4 py-2.5 font-body text-sm"
                     />
                   </div>
                 </div>
 
                 <div class="border-b border-vault-border/30 pb-2 pt-2">
-                  <span class="text-xs font-body tracking-wider text-vault-gold">2. 工作年限</span>
+                  <span class="text-xs font-body tracking-wider text-vault-gold">{{ t('sectionYears') }}</span>
                 </div>
 
                 <!-- 年限输入模式切换 -->
@@ -78,21 +78,21 @@
                     class="flex-1 py-1.5 text-xs font-body rounded transition-all"
                     :class="yearsMode === 'direct' ? 'bg-vault-gold/10 text-vault-gold border border-vault-gold/20' : 'text-vault-muted hover:text-vault-text'"
                   >
-                    直接输入年限
+                    {{ t('directInput') }}
                   </button>
                   <button
                     @click="yearsMode = 'dates'"
                     class="flex-1 py-1.5 text-xs font-body rounded transition-all"
                     :class="yearsMode === 'dates' ? 'bg-vault-gold/10 text-vault-gold border border-vault-gold/20' : 'text-vault-muted hover:text-vault-text'"
                   >
-                    按起止日期计算
+                    {{ t('dateRange') }}
                   </button>
                 </div>
 
                 <!-- 直接输入年限 -->
                 <div v-if="yearsMode === 'direct'">
                   <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">
-                    实际工作年限 (年)
+                    {{ t('yearsLabel') }}
                   </label>
                   <div class="flex gap-2">
                     <input
@@ -100,17 +100,17 @@
                       type="number"
                       step="0.1"
                       min="0"
-                      placeholder="例如: 2.5"
+                      :placeholder="t('yearsPlaceholder')"
                       class="input-vault flex-1 rounded-lg px-4 py-2.5 font-body text-sm"
                     />
-                    <span class="text-xs text-vault-muted self-center font-body">年</span>
+                    <span class="text-xs text-vault-muted self-center font-body">{{ t('yearUnit') }}</span>
                   </div>
                 </div>
 
                 <!-- 按日期计算 -->
                 <div v-else class="grid grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">入职日期</label>
+                    <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">{{ t('entryDate') }}</label>
                     <input
                       v-model="entryDate"
                       type="date"
@@ -118,7 +118,7 @@
                     />
                   </div>
                   <div>
-                    <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">最后工作日</label>
+                    <label class="block text-[10px] font-body tracking-wider text-vault-muted uppercase mb-1.5">{{ t('lastWorkDay') }}</label>
                     <input
                       v-model="endDate"
                       type="date"
@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="border-b border-vault-border/30 pb-2 pt-2">
-                  <span class="text-xs font-body tracking-wider text-vault-gold">3. 赔偿方案</span>
+                  <span class="text-xs font-body tracking-wider text-vault-gold">{{ t('sectionScheme') }}</span>
                 </div>
 
                 <!-- 赔偿方案选择 -->
@@ -162,40 +162,40 @@
                       <span class="text-[9px] font-mono text-vault-muted/70 tracking-widest">ESTIMATE RECEIPT</span>
                       <span class="text-[9px] font-mono text-vault-gold/60">VER.2026</span>
                     </div>
-                    <h3 class="font-display text-lg text-vault-text mt-1">赔偿金明细账单</h3>
+                    <h3 class="font-display text-lg text-vault-text mt-1">{{ t('receiptTitle') }}</h3>
                   </div>
 
                   <!-- Calculations -->
                   <div class="py-4 space-y-3.5 flex-1 flex flex-col justify-center">
                     <!-- 实际年限与折算年限 -->
                     <div class="flex justify-between items-baseline">
-                      <span class="text-xs font-body text-vault-muted">工作年限折算:</span>
+                      <span class="text-xs font-body text-vault-muted">{{ t('yearsConversion') }}</span>
                       <div class="text-right">
                         <span class="font-mono text-sm text-vault-text">
-                          {{ calculatedYears.toFixed(2) }} 年
+                          {{ calculatedYears.toFixed(2) }} {{ t('yearUnit') }}
                         </span>
                         <div class="text-[9px] font-body text-vault-gold/70 mt-0.5">
-                          折算补偿系数: {{ roundedN }} 个月 (N)
+                          {{ t('nCoefficient')(roundedN) }}
                         </div>
                       </div>
                     </div>
 
                     <!-- 计算基数 -->
                     <div class="flex justify-between items-baseline">
-                      <span class="text-xs font-body text-vault-muted">月补偿基数:</span>
+                      <span class="text-xs font-body text-vault-muted">{{ t('compBase') }}</span>
                       <div class="text-right">
                         <span class="font-mono text-sm text-vault-text">
                           {{ config.currency }}{{ compensationBase.toLocaleString() }}
                         </span>
                         <div v-if="isCapped" class="text-[9px] font-body text-red-400/80 mt-0.5">
-                          ⚠️ 已触发3倍社平限额封顶
+                          {{ t('capTriggered') }}
                         </div>
                       </div>
                     </div>
 
                     <!-- N部分 -->
                     <div class="flex justify-between items-baseline">
-                      <span class="text-xs font-body text-vault-muted">经济补偿金 (N):</span>
+                      <span class="text-xs font-body text-vault-muted">{{ t('economicComp') }}</span>
                       <span class="font-mono text-sm text-vault-text">
                         {{ config.currency }}{{ nCompensation.toLocaleString() }}
                       </span>
@@ -203,7 +203,7 @@
 
                     <!-- +1部分 -->
                     <div class="flex justify-between items-baseline" v-if="hasPlusOne">
-                      <span class="text-xs font-body text-vault-muted">代通知金 (+1):</span>
+                      <span class="text-xs font-body text-vault-muted">{{ t('noticeComp') }}</span>
                       <span class="font-mono text-sm text-vault-text">
                         {{ config.currency }}{{ plusOneCompensation.toLocaleString() }}
                       </span>
@@ -212,7 +212,7 @@
 
                   <!-- Total Receipt Footer -->
                   <div class="border-t border-dashed border-vault-border/60 pt-3 mt-2">
-                    <div class="text-[9px] font-mono text-vault-muted/70 tracking-widest uppercase mb-1">TOTAL ESTIMATED COMPENSATION</div>
+                    <div class="text-[9px] font-mono text-vault-muted/70 tracking-widest uppercase mb-1">{{ t('totalEstimate') }}</div>
                     <div class="flex justify-between items-center">
                       <span class="font-display text-2xl lg:text-3xl gold-text font-bold">
                         {{ config.currency }}{{ totalCompensation.toLocaleString() }}
@@ -227,8 +227,8 @@
                 <!-- Law Citation Footnote -->
                 <div class="mt-4 p-3 rounded-lg bg-vault-black/30 border border-vault-border/20">
                   <div class="text-[9px] font-body text-vault-muted/80 leading-relaxed">
-                    <span class="text-vault-gold font-medium">《劳动合同法》第四十七条：</span>
-                    经济补偿按劳动者在本单位工作年限，每满一年支付一个月工资的标准向劳动者支付。六个月以上不满一年的，按一年计算；不满六个月的，向劳动者支付半个月工资的经济补偿。
+                    <span class="text-vault-gold font-medium">{{ t('laborLawTitle') }}</span>
+                    {{ t('laborLawText') }}
                   </div>
                 </div>
               </div>
@@ -242,7 +242,7 @@
               @click="emit('close')"
               class="flex-1 py-2.5 rounded-lg border border-vault-border text-vault-muted hover:text-vault-text hover:border-vault-gold/30 transition-all font-body text-sm tracking-wider"
             >
-              关闭
+              {{ t('close') }}
             </button>
           </div>
 
@@ -256,6 +256,9 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+
+const { t } = useI18n()
 
 const props = defineProps({
   show: Boolean,
@@ -282,11 +285,11 @@ const endDate = ref('')
 // 方案选择
 const selectedScheme = ref('N+1')
 
-const schemes = [
-  { label: 'N', value: 'N', desc: '标准协商解除' },
-  { label: 'N+1', value: 'N+1', desc: '标准无提前通知' },
-  { label: '2N', value: '2N', desc: '违法解除/双倍' },
-]
+const schemes = computed(() => [
+  { label: 'N', value: 'N', desc: t('schemeN') },
+  { label: 'N+1', value: 'N+1', desc: t('schemeN1') },
+  { label: '2N', value: '2N', desc: t('scheme2N') },
+])
 
 // 监听配置中的薪资，自动同步
 watch(() => props.config.salary, (newVal) => {

@@ -18,7 +18,10 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="hidden md:block font-mono text-[10px] text-vault-muted/60 tracking-widest select-none">{{ currentDateStr }}</span>
-          <button @click="toggle" class="header-btn" :title="isDark ? '切换亮色' : '切换暗色'">
+          <button @click="toggleLocale" class="header-btn text-[9px] font-body tracking-wider" :title="t('langLabel')">
+            {{ isZh ? 'EN' : '中' }}
+          </button>
+          <button @click="toggle" class="header-btn" :title="isDark ? t('toggleLight') : t('toggleDark')">
             <svg v-if="isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <circle cx="12" cy="12" r="5"/>
               <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -27,17 +30,17 @@
               <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
             </svg>
           </button>
-          <button @click="showHistory = true" class="header-btn" title="薪资记录">
+          <button @click="showHistory = true" class="header-btn" :title="t('salaryRecords')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M4 7V4a2 2 0 012-2h8.5L20 7.5V20a2 2 0 01-2 2H6a2 2 0 01-2-2v-3M9 12h6M9 16h4" stroke-linecap="round"/>
             </svg>
           </button>
-          <button @click="showCompensation = true" class="header-btn" title="赔偿计算器">
+          <button @click="showCompensation = true" class="header-btn" :title="t('compensationCalc')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round"/>
             </svg>
           </button>
-          <button @click="showSettings = true" class="header-btn" title="设置">
+          <button @click="showSettings = true" class="header-btn" :title="t('settings')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <circle cx="12" cy="12" r="3"/>
               <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
@@ -51,10 +54,10 @@
         <div v-if="!config.setupDone" class="flex-1 flex items-center justify-center relative z-10">
           <div class="text-center max-w-xs px-6">
             <div class="text-5xl mb-5 animate-float">💰</div>
-            <h1 class="font-display text-4xl gold-text mb-2">发薪倒计时</h1>
-            <p class="font-body text-vault-muted text-sm mb-7 leading-relaxed">每个月最期待的那一天<br>让我们一起数着日子过</p>
+            <h1 class="font-display text-4xl gold-text mb-2">{{ t('paydayCountdown') }}</h1>
+            <p class="font-body text-vault-muted text-sm mb-7 leading-relaxed" v-html="t('landingDesc').replace('\n', '<br>')"></p>
             <button @click="showSettings = true" class="btn-gold px-7 py-2.5 rounded-full font-body text-sm tracking-[0.2em]">
-              开始设置
+              {{ t('startSetup') }}
             </button>
           </div>
         </div>
@@ -67,19 +70,19 @@
             <div v-if="isPayday" class="absolute inset-0 flex items-center justify-center z-20 bg-vault-black/60 backdrop-blur-sm rounded-b-2xl">
               <div class="text-center">
                 <div class="text-7xl mb-4 animate-float">🎉</div>
-                <h1 class="font-display text-5xl gold-text mb-2">发薪日！</h1>
-                <p class="font-body text-vault-text">{{ config.name ? `${config.name}，` : '' }}钱到账了！</p>
+                <h1 class="font-display text-5xl gold-text mb-2">{{ t('paydayTitle') }}</h1>
+                <p class="font-body text-vault-text">{{ config.name ? `${config.name}${isZh ? '，' : ', '}` : '' }}{{ t('paydayMsg') }}</p>
               </div>
             </div>
           </Transition>
 
           <Transition name="mood-change" mode="out-in">
-            <div :key="moodInfo.level" class="text-center mb-5 md:mb-6 select-none">
-              <span class="text-2xl">{{ moodInfo.emoji }}</span>
+            <div :key="localizedMood.level" class="text-center mb-5 md:mb-6 select-none">
+              <span class="text-2xl">{{ localizedMood.emoji }}</span>
               <h2 class="font-display text-lg md:text-xl text-vault-text mt-1 tracking-wide">
-                {{ config.name ? `${config.name}，` : '' }}{{ moodInfo.title }}
+                {{ config.name ? `${config.name}${isZh ? '，' : ', '}` : '' }}{{ localizedMood.title }}
               </h2>
-              <p class="font-body text-[11px] text-vault-muted/70 mt-0.5 italic">{{ moodInfo.message }}</p>
+              <p class="font-body text-[11px] text-vault-muted/70 mt-0.5 italic">{{ localizedMood.message }}</p>
             </div>
           </Transition>
 
@@ -88,7 +91,7 @@
               <div class="font-display gold-text font-light" :style="{ fontSize: ringSize * 0.16 + 'px' }">
                 {{ Math.round(monthProgress * 100) }}%
               </div>
-              <div class="font-body text-vault-muted/60 uppercase tracking-[0.2em]" :style="{ fontSize: Math.max(ringSize * 0.055, 9) + 'px' }">本月进度</div>
+              <div class="font-body text-vault-muted/60 uppercase tracking-[0.2em]" :style="{ fontSize: Math.max(ringSize * 0.055, 9) + 'px' }">{{ t('monthProgress') }}</div>
             </div>
           </ProgressRing>
 
@@ -98,23 +101,23 @@
 
           <div class="mt-5 md:mt-6 flex items-center gap-5 md:gap-7">
             <div class="text-center">
-              <div class="stat-label">下次发薪</div>
+              <div class="stat-label">{{ t('nextPayday') }}</div>
               <div class="font-display text-vault-gold text-sm tracking-wider">{{ nextPaydayStr }}</div>
             </div>
             <div v-if="config.salary" class="w-px h-5 bg-vault-border/30"></div>
             <div v-if="config.salary" class="text-center">
-              <div class="stat-label">月薪</div>
+              <div class="stat-label">{{ t('monthlySalary') }}</div>
               <div class="font-mono text-vault-gold text-sm">{{ config.currency }}{{ Number(config.salary).toLocaleString() }}</div>
             </div>
             <div v-if="config.salary" class="w-px h-5 bg-vault-border/30"></div>
             <div v-if="config.salary" class="text-center">
-              <div class="stat-label">日均({{ workingDaysThisMonth }}天)</div>
+              <div class="stat-label">{{ t('dailyAvg') }}({{ workingDaysThisMonth }}{{ t('dayUnit') }})</div>
               <div class="font-mono text-vault-text/80 text-sm">{{ config.currency }}{{ dailyPay.toLocaleString() }}</div>
             </div>
             <div class="w-px h-5 bg-vault-border/30"></div>
             <div class="text-center">
-              <div class="stat-label">已等待</div>
-              <div class="font-mono text-vault-text/80 text-sm">{{ cycleElapsedDays }}天</div>
+              <div class="stat-label">{{ t('waited') }}</div>
+              <div class="font-mono text-vault-text/80 text-sm">{{ cycleElapsedDays }}{{ t('dayUnit') }}</div>
             </div>
           </div>
         </div>
@@ -146,10 +149,10 @@
         </div>
         <div class="text-center mt-1">
           <span class="font-body text-[10px] text-vault-muted/60">
-            已熬过
-            <span class="text-vault-gold/80"> {{ cycleElapsedDays }} </span>天，还剩
-            <span class="text-vault-gold/80"> {{ countdown.days }} </span>天
-            <span class="text-vault-muted/50">{{ countdown.hours }}时{{ countdown.minutes }}分</span>
+            {{ t('endured') }}
+            <span class="text-vault-gold/80"> {{ cycleElapsedDays }} </span>{{ t('remaining') }}
+            <span class="text-vault-gold/80"> {{ countdown.days }} </span>{{ t('dayUnit') }}
+            <span class="text-vault-muted/50">{{ countdown.hours }}{{ t('hourUnit') }}{{ countdown.minutes }}{{ t('minuteUnit') }}</span>
           </span>
         </div>
       </footer>
@@ -165,7 +168,7 @@
           <div class="relative w-full max-w-sm flex flex-col animate-slide-in-right drawer-panel">
             <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-vault-gold/40 to-transparent"></div>
             <div class="flex items-center justify-between px-5 py-4 border-b border-vault-border/30">
-              <h2 class="font-display text-lg text-vault-text">薪资记录</h2>
+              <h2 class="font-display text-lg text-vault-text">{{ t('salaryRecords') }}</h2>
               <button @click="showHistory = false" class="text-vault-muted hover:text-vault-text transition-colors p-1">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <path d="M18 6L6 18M6 6l12 12"/>
@@ -192,6 +195,7 @@ import { useWindowSize } from '@vueuse/core'
 import { usePayday } from './composables/usePayday.js'
 import { useHoliday } from './composables/useHoliday.js'
 import { useTheme } from './composables/useTheme.js'
+import { useI18n } from './composables/useI18n.js'
 import SpringToy from './components/SpringToy.vue'
 import CountdownBlock from './components/CountdownBlock.vue'
 import ProgressRing from './components/ProgressRing.vue'
@@ -209,6 +213,17 @@ const {
 
 const { fetchYear, getWorkingDays } = useHoliday()
 const { isDark, toggle } = useTheme()
+const { t, tm, isZh, toggleLocale } = useI18n()
+
+const localizedMood = computed(() => {
+  const m = moodInfo.value
+  const mood = tm('mood')[m.level]
+  const title = mood.title
+  const message = typeof mood.message === 'function'
+    ? mood.message(m.level === 'tomorrow' ? m.hours : m.days)
+    : mood.message
+  return { ...m, title, message }
+})
 
 const showSettings = ref(false)
 const showHistory = ref(false)
@@ -225,6 +240,8 @@ const radialGold = computed(() => {
 })
 
 onMounted(async () => {
+  document.documentElement.lang = isZh.value ? 'zh-CN' : 'en'
+  document.title = isZh.value ? 'PayDrop · 发薪倒计时' : 'PayDrop · Payday Countdown'
   const year = new Date().getFullYear()
   await Promise.all([fetchYear(year), fetchYear(year + 1)])
   holidayReady.value = true
@@ -252,7 +269,7 @@ const ringSize = computed(() => {
 
 function formatDate(date) {
   const d = new Date(date)
-  return `${d.getMonth() + 1}月${d.getDate()}日`
+  return t('monthDay')(d.getMonth() + 1, d.getDate())
 }
 
 const nextPaydayStr = computed(() => formatDate(nextPayday.value))

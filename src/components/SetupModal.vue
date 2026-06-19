@@ -12,18 +12,18 @@
 
           <!-- 标题 -->
           <div class="text-center mb-8">
-            <div class="text-vault-gold/60 text-sm font-body tracking-[0.3em] uppercase mb-2">PAYDROP SETTINGS</div>
-            <h2 class="font-display text-3xl gold-text">设置发薪信息</h2>
+            <div class="text-vault-gold/60 text-sm font-body tracking-[0.3em] uppercase mb-2">{{ t('setupSubtitle') }}</div>
+            <h2 class="font-display text-3xl gold-text">{{ t('setupTitle') }}</h2>
           </div>
 
           <div class="space-y-5">
             <!-- 昵称 -->
             <div>
-              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">你的名字（可选）</label>
+              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">{{ t('nameLabel') }}</label>
               <input
                 v-model="form.name"
                 type="text"
-                placeholder="打工人"
+                :placeholder="t('namePlaceholder')"
                 class="input-vault w-full rounded-lg px-4 py-3 font-body text-sm"
               />
             </div>
@@ -31,7 +31,7 @@
             <!-- 发薪日 -->
             <div>
               <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">
-                每月几号发薪 <span class="text-vault-gold">*</span>
+                {{ t('payDayLabel') }} <span class="text-vault-gold">*</span>
               </label>
               <div class="grid grid-cols-7 gap-1.5">
                 <button
@@ -50,7 +50,7 @@
 
             <!-- 月薪 -->
             <div>
-              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">月薪（可选，仅本地展示）</label>
+              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">{{ t('salaryLabel') }}</label>
               <div class="flex gap-2">
                 <select
                   v-model="form.currency"
@@ -64,7 +64,7 @@
                 <input
                   v-model="form.salary"
                   type="number"
-                  placeholder="输入月薪金额"
+                  :placeholder="t('salaryPlaceholder')"
                   class="input-vault flex-1 rounded-lg px-4 py-3 font-body text-sm"
                 />
               </div>
@@ -78,14 +78,14 @@
               @click="emit('close')"
               class="flex-1 py-3 rounded-lg border border-vault-border text-vault-muted hover:text-vault-text hover:border-vault-gold/30 transition-all font-body text-sm tracking-wider"
             >
-              取消
+              {{ t('cancel') }}
             </button>
             <button
               @click="handleSave"
               class="flex-1 btn-gold py-3 rounded-lg font-body text-sm tracking-[0.15em]"
               :disabled="!form.payDay"
             >
-              {{ config.setupDone ? '保存设置' : '开始倒计时' }}
+              {{ config.setupDone ? t('saveSettings') : t('startCountdown') }}
             </button>
           </div>
 
@@ -99,6 +99,9 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+
+const { t } = useI18n()
 
 const props = defineProps({
   show: Boolean,

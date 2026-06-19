@@ -8,7 +8,7 @@
             <div
               :key="unit.value"
               class="font-display text-[42px] md:text-5xl font-light tracking-tight leading-[0.82] select-none"
-              :class="unit.label === '天' ? 'gold-text' : 'text-vault-text/90'"
+              :class="idx === 0 ? 'gold-text' : 'text-vault-text/90'"
             >
               {{ pad(unit.value) }}
             </div>
@@ -31,6 +31,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+
+const { t } = useI18n()
 
 const props = defineProps({
   countdown: { type: Object, required: true },
@@ -38,10 +41,10 @@ const props = defineProps({
 })
 
 const units = computed(() => [
-  { value: props.countdown.days, label: '天' },
-  { value: props.countdown.hours, label: '时' },
-  { value: props.countdown.minutes, label: '分' },
-  { value: props.countdown.seconds, label: '秒' },
+  { value: props.countdown.days, label: t('days') },
+  { value: props.countdown.hours, label: t('hours') },
+  { value: props.countdown.minutes, label: t('minutes') },
+  { value: props.countdown.seconds, label: t('seconds') },
 ])
 </script>
 
