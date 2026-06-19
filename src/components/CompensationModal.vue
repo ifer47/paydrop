@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- 年限输入模式切换 -->
-                <div class="flex rounded-lg bg-vault-black/40 p-1 border border-vault-border/30">
+                <div class="flex rounded-lg mode-switch p-1 border border-vault-border/30">
                   <button
                     @click="yearsMode = 'direct'"
                     class="flex-1 py-1.5 text-xs font-body rounded transition-all"
@@ -150,7 +150,7 @@
 
               <!-- ─── RIGHT: OUTPUTS (RECEIPT) ─── -->
               <div class="flex flex-col justify-between">
-                <div class="vault-panel rounded-xl p-5 border border-vault-gold/30 bg-gradient-to-b from-vault-panel to-vault-black/80 relative overflow-hidden flex-1 flex flex-col justify-between shadow-lg">
+                <div class="receipt-card rounded-xl p-5 border border-vault-gold/30 relative overflow-hidden flex-1 flex flex-col justify-between shadow-lg">
                   <!-- Decorative watermark -->
                   <div class="absolute right-4 top-4 font-display text-7xl text-vault-gold/5 font-bold select-none pointer-events-none">
                     {{ selectedScheme }}
@@ -225,7 +225,7 @@
                 </div>
 
                 <!-- Law Citation Footnote -->
-                <div class="mt-4 p-3 rounded-lg bg-vault-black/30 border border-vault-border/20">
+                <div class="mt-4 p-3 rounded-lg law-footnote border border-vault-border/20">
                   <div class="text-[9px] font-body text-vault-muted/80 leading-relaxed">
                     <span class="text-vault-gold font-medium">{{ t('laborLawTitle') }}</span>
                     {{ t('laborLawText') }}
@@ -402,6 +402,30 @@ const totalCompensation = computed(() => {
 </script>
 
 <style scoped>
+.receipt-card {
+  background: linear-gradient(180deg, rgb(var(--v-panel) / 0.95), rgb(var(--v-black) / 0.8));
+  backdrop-filter: blur(10px);
+  transition: background 0.5s;
+}
+.law-footnote {
+  background: rgb(var(--v-black) / 0.3);
+  transition: background 0.5s;
+}
+.mode-switch {
+  background: rgb(var(--v-black) / 0.4);
+  transition: background 0.5s;
+}
+
+:global(.light-theme) .receipt-card {
+  background: linear-gradient(180deg, rgb(var(--v-dark) / 0.6), rgb(var(--v-dark) / 0.4));
+}
+:global(.light-theme) .law-footnote {
+  background: rgb(var(--v-dark) / 0.5);
+}
+:global(.light-theme) .mode-switch {
+  background: rgb(var(--v-dark) / 0.5);
+}
+
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s ease;

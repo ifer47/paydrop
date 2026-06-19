@@ -6,42 +6,42 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="emit('close')"></div>
 
         <!-- Panel -->
-        <div class="vault-panel relative rounded-2xl p-8 w-full max-w-md animate-fade-up shadow-2xl">
+        <div class="vault-panel relative rounded-xl p-5 w-full max-w-xs animate-fade-up shadow-2xl">
           <!-- 顶部装饰线 -->
-          <div class="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-vault-gold/60 to-transparent"></div>
+          <div class="absolute top-0 left-5 right-5 h-px bg-gradient-to-r from-transparent via-vault-gold/60 to-transparent"></div>
 
           <!-- 标题 -->
-          <div class="text-center mb-8">
-            <div class="text-vault-gold/60 text-sm font-body tracking-[0.3em] uppercase mb-2">{{ t('setupSubtitle') }}</div>
-            <h2 class="font-display text-3xl gold-text">{{ t('setupTitle') }}</h2>
+          <div class="text-center mb-4">
+            <div class="text-vault-gold/60 text-[9px] font-body tracking-[0.3em] uppercase mb-1">{{ t('setupSubtitle') }}</div>
+            <h2 class="font-display text-xl gold-text">{{ t('setupTitle') }}</h2>
           </div>
 
-          <div class="space-y-5">
+          <div class="space-y-3">
             <!-- 昵称 -->
             <div>
-              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">{{ t('nameLabel') }}</label>
+              <label class="block text-[10px] font-body tracking-[0.15em] text-vault-muted uppercase mb-1">{{ t('nameLabel') }}</label>
               <input
                 v-model="form.name"
                 type="text"
                 :placeholder="t('namePlaceholder')"
-                class="input-vault w-full rounded-lg px-4 py-3 font-body text-sm"
+                class="input-vault w-full rounded-md px-3 py-2 font-body text-xs"
               />
             </div>
 
             <!-- 发薪日 -->
             <div>
-              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">
+              <label class="block text-[10px] font-body tracking-[0.15em] text-vault-muted uppercase mb-1">
                 {{ t('payDayLabel') }} <span class="text-vault-gold">*</span>
               </label>
-              <div class="grid grid-cols-7 gap-1.5">
+              <div class="grid grid-cols-7 gap-1">
                 <button
                   v-for="day in payDays"
                   :key="day"
                   @click="form.payDay = day"
-                  class="aspect-square rounded-md text-sm font-body transition-all duration-200"
+                  class="h-7 rounded text-xs font-body transition-all duration-200"
                   :class="form.payDay == day
-                    ? 'btn-gold text-vault-black font-semibold shadow-lg'
-                    : 'text-vault-muted hover:text-vault-text border border-vault-border hover:border-vault-gold/30'"
+                    ? 'btn-gold text-vault-black font-semibold shadow-md'
+                    : 'text-vault-muted hover:text-vault-text border border-vault-border/60 hover:border-vault-gold/30'"
                 >
                   {{ day }}
                 </button>
@@ -50,11 +50,11 @@
 
             <!-- 月薪 -->
             <div>
-              <label class="block text-xs font-body tracking-[0.2em] text-vault-muted uppercase mb-2">{{ t('salaryLabel') }}</label>
-              <div class="flex gap-2">
+              <label class="block text-[10px] font-body tracking-[0.15em] text-vault-muted uppercase mb-1">{{ t('salaryLabel') }}</label>
+              <div class="flex gap-1.5">
                 <select
                   v-model="form.currency"
-                  class="input-vault rounded-lg px-3 py-3 font-body text-sm w-16"
+                  class="input-vault rounded-md px-2 py-2 font-body text-xs w-14"
                 >
                   <option value="¥">¥</option>
                   <option value="$">$</option>
@@ -65,24 +65,24 @@
                   v-model="form.salary"
                   type="number"
                   :placeholder="t('salaryPlaceholder')"
-                  class="input-vault flex-1 rounded-lg px-4 py-3 font-body text-sm"
+                  class="input-vault flex-1 rounded-md px-3 py-2 font-body text-xs"
                 />
               </div>
             </div>
           </div>
 
           <!-- 按钮 -->
-          <div class="mt-8 flex gap-3">
+          <div class="mt-4 flex gap-2">
             <button
               v-if="showClose"
               @click="emit('close')"
-              class="flex-1 py-3 rounded-lg border border-vault-border text-vault-muted hover:text-vault-text hover:border-vault-gold/30 transition-all font-body text-sm tracking-wider"
+              class="flex-1 py-2 rounded-md border border-vault-border text-vault-muted hover:text-vault-text hover:border-vault-gold/30 transition-all font-body text-xs tracking-wider"
             >
               {{ t('cancel') }}
             </button>
             <button
               @click="handleSave"
-              class="flex-1 btn-gold py-3 rounded-lg font-body text-sm tracking-[0.15em]"
+              class="flex-1 btn-gold py-2 rounded-md font-body text-xs tracking-[0.15em]"
               :disabled="!form.payDay"
             >
               {{ config.setupDone ? t('saveSettings') : t('startCountdown') }}
@@ -90,7 +90,7 @@
           </div>
 
           <!-- 底部装饰线 -->
-          <div class="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-vault-gold/30 to-transparent"></div>
+          <div class="absolute bottom-0 left-5 right-5 h-px bg-gradient-to-r from-transparent via-vault-gold/30 to-transparent"></div>
         </div>
       </div>
     </Transition>
