@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Jost:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════ DARK THEME (default) ══════════ */
+:root {
+  /* Tailwind colors: space-separated RGB for alpha support */
+  --v-black:      9 11 15;
+  --v-dark:       13 17 23;
+  --v-panel:      17 24 39;
+  --v-border:     30 45 64;
+  --v-gold:       201 168 76;
+  --v-gold-light: 240 208 128;
+  --v-gold-dark:  138 109 42;
+  --v-amber:      232 168 56;
+  --v-copper:     184 115 51;
+  --v-text:       212 197 160;
+  --v-muted:      107 114 128;
+
+  /* Semantic surface tokens (full color values) */
+  --v-surface:      rgba(13, 17, 23, 0.92);
+  --v-surface-end:  rgba(9, 11, 15, 0.96);
+  --v-panel-bg:     linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(13, 17, 23, 0.98));
+  --v-card-bg:      linear-gradient(180deg, rgba(201, 168, 76, 0.06), rgba(201, 168, 76, 0.02));
+  --v-card-border:  rgba(201, 168, 76, 0.18);
+  --v-card-shine:   rgba(201, 168, 76, 0.6);
+  --v-input-bg:     rgba(13, 17, 23, 0.8);
+  --v-overlay:      rgba(0, 0, 0, 0.6);
+  --v-drawer-bg:    linear-gradient(180deg, rgba(17,24,39,0.98), rgba(9,11,15,0.99));
+
+  --gold-stop-1: #8a6d2a;
+  --gold-stop-2: #c9a84c;
+  --gold-stop-3: #f0d080;
+  --gold-stop-4: #e8a838;
+
+  --v-gold-grad: linear-gradient(135deg, #8a6d2a, #c9a84c, #f0d080, #c9a84c, #8a6d2a);
+  --v-btn-gold:  linear-gradient(135deg, #8a6d2a, #c9a84c, #e8a838);
+
+  --v-ring-track:    rgba(201, 168, 76, 0.08);
+  --v-ring-tick-on:  rgba(201, 168, 76, 0.4);
+  --v-ring-tick-off: rgba(201, 168, 76, 0.08);
+  --v-ring-glow:     rgba(201, 168, 76, 0.6);
+  --v-progress-bar:  linear-gradient(90deg, #8a6d2a, #c9a84c, #f0d080);
+  --v-progress-glow: rgba(201, 168, 76, 0.4);
+  --v-dot-glow:      rgba(240, 208, 128, 0.8);
+
+  --v-spring-stroke: rgba(201, 168, 76, 0.25);
+  --v-spring-glow:   rgba(201, 168, 76, 0.1);
+  --v-knob-hi:       rgba(240, 208, 128, 0.7);
+  --v-knob-mid:      rgba(201, 168, 76, 0.5);
+  --v-knob-lo:       rgba(138, 109, 42, 0.4);
+  --v-knob-border:   rgba(201, 168, 76, 0.3);
+  --v-drag-line:     rgba(201, 168, 76, 0.15);
+
+  --v-noise-opacity: 0.4;
+  --v-star-opacity:  1;
+  --v-shadow:        0 4px 80px rgba(0,0,0,0.7);
+}
+
+/* ══════════ LIGHT THEME — "Ivory Dial" ══════════ */
+.light-theme {
+  --v-black:      245 241 234;
+  --v-dark:       236 230 219;
+  --v-panel:      255 255 255;
+  --v-border:     196 180 148;
+  --v-gold:       138 109 42;
+  --v-gold-light: 201 168 76;
+  --v-gold-dark:  107 84 32;
+  --v-amber:      184 134 28;
+  --v-copper:     138 90 34;
+  --v-text:       26 24 16;
+  --v-muted:      107 94 80;
+
+  --v-surface:      rgba(255, 255, 255, 0.88);
+  --v-surface-end:  rgba(245, 241, 234, 0.94);
+  --v-panel-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 241, 234, 0.95));
+  --v-card-bg:      linear-gradient(180deg, rgba(138, 109, 42, 0.06), rgba(138, 109, 42, 0.02));
+  --v-card-border:  rgba(138, 109, 42, 0.2);
+  --v-card-shine:   rgba(138, 109, 42, 0.3);
+  --v-input-bg:     rgba(245, 241, 234, 0.7);
+  --v-overlay:      rgba(44, 36, 25, 0.4);
+  --v-drawer-bg:    linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,244,238,0.99));
+
+  --gold-stop-1: #6b5420;
+  --gold-stop-2: #8a6d2a;
+  --gold-stop-3: #c9a84c;
+  --gold-stop-4: #b8861c;
+
+  --v-gold-grad: linear-gradient(135deg, #6b5420, #8a6d2a, #c9a84c, #8a6d2a, #6b5420);
+  --v-btn-gold:  linear-gradient(135deg, #8a6d2a, #c9a84c, #b8861c);
+
+  --v-ring-track:    rgba(138, 109, 42, 0.1);
+  --v-ring-tick-on:  rgba(138, 109, 42, 0.45);
+  --v-ring-tick-off: rgba(138, 109, 42, 0.1);
+  --v-ring-glow:     rgba(138, 109, 42, 0.35);
+  --v-progress-bar:  linear-gradient(90deg, #8a6d2a, #c9a84c, #b8861c);
+  --v-progress-glow: rgba(138, 109, 42, 0.25);
+  --v-dot-glow:      rgba(201, 168, 76, 0.6);
+
+  --v-spring-stroke: rgba(138, 109, 42, 0.3);
+  --v-spring-glow:   rgba(138, 109, 42, 0.08);
+  --v-knob-hi:       rgba(201, 168, 76, 0.8);
+  --v-knob-mid:      rgba(138, 109, 42, 0.6);
+  --v-knob-lo:       rgba(107, 84, 32, 0.5);
+  --v-knob-border:   rgba(138, 109, 42, 0.4);
+  --v-drag-line:     rgba(138, 109, 42, 0.2);
+
+  --v-noise-opacity: 0.08;
+  --v-star-opacity:  0;
+  --v-shadow:        0 4px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  --v-shadow: 0 4px 40px rgba(0,0,0,0.08);
+}
+
+/* ══════════ BASE ══════════ */
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: rgb(var(--v-black));
+    color: rgb(var(--v-text));
+    font-family: 'Jost', sans-serif;
+    overflow-x: hidden;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: rgb(var(--v-dark)); }
+  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+}
+
+/* ══════════ COMPONENTS ══════════ */
+@layer components {
+  .gold-text {
+    background: var(--v-gold-grad);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .vault-panel {
+    background: var(--v-panel-bg);
+    border: 1px solid var(--v-panel-border);
+    backdrop-filter: blur(20px);
+  }
+
+  .num-card {
+    @apply relative overflow-hidden;
+    background: var(--v-card-bg);
+    border: 1px solid var(--v-card-border);
+    transition: background 0.4s, border-color 0.4s;
+  }
+
+  .num-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--v-card-shine), transparent);
+  }
+
+  .progress-ring-track { stroke: var(--v-ring-track); }
+
+  .progress-ring-bar {
+    stroke: url(#goldGradient);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease;
+    filter: drop-shadow(0 0 8px var(--v-ring-glow));
+  }
+
+  .btn-gold {
+    background: var(--v-btn-gold);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-gold:hover::after { left: 100%; }
+  .btn-gold:hover {
+    box-shadow: 0 0 30px var(--v-progress-glow);
+    transform: translateY(-1px);
+  }
+
+  .input-vault {
+    background: var(--v-input-bg);
+    border: 1px solid var(--v-panel-border);
+    color: rgb(var(--v-text));
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.4s;
+  }
+
+  .input-vault:focus {
+    outline: none;
+    border-color: rgb(var(--v-gold));
+    box-shadow: 0 0 0 3px rgba(var(--v-gold), 0.1);
+  }
+
+  .input-vault::placeholder {
+    color: rgb(var(--v-muted) / 0.5);
+  }
+}
+
+/* ══════════ DECORATIVE ══════════ */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--v-noise-opacity);
+  transition: opacity 0.5s;
+}
+
+.stars {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; overflow: hidden; z-index: 0;
+  opacity: var(--v-star-opacity);
+  transition: opacity 0.5s;
+}
+
+.stars::before, .stars::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(201,168,76,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 15%, rgba(201,168,76,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 35%, rgba(240,208,128,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 70%, rgba(201,168,76,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 80%, rgba(201,168,76,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 55%, rgba(240,208,128,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 10%, rgba(201,168,76,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5% 45%, rgba(201,168,76,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 90%, rgba(201,168,76,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 35% 60%, rgba(201,168,76,0.2) 0%, transparent 100%);
+}
+
+/* ══════════ ANIMATIONS ══════════ */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.flip-enter-active {
+  animation: countFlip 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes countFlip {
+  0% { transform: translateY(-16px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 8px; height: 8px; top: -10px;
+  border-radius: 1px;
+  animation: confettiFall linear forwards;
+  z-index: 1000;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
