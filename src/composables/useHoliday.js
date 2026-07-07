@@ -90,6 +90,26 @@ export function useHoliday() {
     return count
   }
 
+  /**
+   * 计算 [from, to) 区间内的工作日天数（按自然日，不含 to 当天）
+   */
+  function countWorkingDaysBetween(from, to) {
+    const start = new Date(from)
+    start.setHours(0, 0, 0, 0)
+    const end = new Date(to)
+    end.setHours(0, 0, 0, 0)
+
+    if (end <= start) return 0
+
+    let count = 0
+    const cursor = new Date(start)
+    while (cursor < end) {
+      if (isWorkDay(cursor)) count++
+      cursor.setDate(cursor.getDate() + 1)
+    }
+    return count
+  }
+
   function formatDate(d) {
     const y = d.getFullYear()
     const m = String(d.getMonth() + 1).padStart(2, '0')
@@ -102,5 +122,6 @@ export function useHoliday() {
     fetchYear,
     isWorkDay,
     getWorkingDays,
+    countWorkingDaysBetween,
   }
 }

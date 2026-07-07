@@ -151,7 +151,7 @@
           <span class="font-body text-[10px] text-vault-muted/60">
             {{ t('endured') }}
             <span class="text-vault-gold/80"> {{ cycleElapsedDays }} </span>{{ t('remaining') }}
-            <span class="text-vault-gold/80"> {{ countdown.days }} </span>{{ t('dayUnit') }}
+            <span class="text-vault-gold/80"> {{ countdown.days }} </span>{{ t('days') }}
             <span class="text-vault-muted/50">{{ countdown.hours }}{{ t('hourUnit') }}{{ countdown.minutes }}{{ t('minuteUnit') }}</span>
           </span>
         </div>
@@ -211,7 +211,7 @@ const {
   deleteRecord,
 } = usePayday()
 
-const { fetchYear, getWorkingDays } = useHoliday()
+const { fetchYear, getWorkingDays, countWorkingDaysBetween } = useHoliday()
 const { isDark, toggle } = useTheme()
 const { t, tm, isZh, toggleLocale } = useI18n()
 
@@ -285,7 +285,7 @@ const currentTimeStr = computed(() => {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 })
 
-const cycleElapsedDays = computed(() => Math.floor((now.value - lastPayday.value) / 86400000))
+const cycleElapsedDays = computed(() => countWorkingDaysBetween(lastPayday.value, now.value))
 
 function handleSave(data) {
   config.value = { ...config.value, ...data, setupDone: true }

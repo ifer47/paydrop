@@ -1,7 +1,9 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
+import { useHoliday } from './useHoliday.js'
 
 export function usePayday() {
+  const { countWorkingDaysBetween } = useHoliday()
   // 持久化配置
   const config = useLocalStorage('payday-config', {
     payDay: 15,           // 每月几号发薪
@@ -60,13 +62,13 @@ export function usePayday() {
     return new Date(prevYear, prevMonth, payDay, 0, 0, 0, 0)
   })
 
-  // 倒计时
+  // 倒计时（天数按剩余工作日计算，时分秒仍为距发薪日的实际时间）
   const countdown = computed(() => {
     const diff = nextPayday.value - now.value
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 }
     
     const totalSeconds = Math.floor(diff / 1000)
-    const days = Math.floor(totalSeconds / 86400)
+    const days = countWorkingDaysBetween(now.value, nextPayday.value)
     const hours = Math.floor((totalSeconds % 86400) / 3600)
     const minutes = Math.floor((totalSeconds % 3600) / 60)
     const seconds = totalSeconds % 60
@@ -81,10 +83,8 @@ export function usePayday() {
     return Math.min(Math.max(elapsed / totalCycle, 0), 1)
   })
 
-  // 距离发薪日天数（含小数）
-  const daysUntil = computed(() => {
-    return countdown.value.total / 86400000
-  })
+  // 距离发薪日剩余工作日
+  const daysUntil = computed(() => countdown.value.days)
 
   // 情绪状态（仅 level / emoji / color / intensity，文案由外层根据 i18n 填充）
   const moodInfo = computed(() => {

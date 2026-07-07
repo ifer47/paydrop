@@ -36,7 +36,7 @@ const messages = {
     minuteUnit: '分',
 
     // Countdown units
-    days: '天',
+    days: '工作日',
     hours: '时',
     minutes: '分',
     seconds: '秒',
@@ -140,7 +140,7 @@ const messages = {
     hourUnit: 'h',
     minuteUnit: 'm left',
 
-    days: 'Days',
+    days: 'Work Days',
     hours: 'Hrs',
     minutes: 'Min',
     seconds: 'Sec',
