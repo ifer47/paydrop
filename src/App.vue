@@ -7,7 +7,17 @@
     ></div>
 
     <!-- ══════════ THE CONSOLE ══════════ -->
-    <div class="console-card w-full h-full md:w-[720px] md:h-[90vh] md:max-h-[760px] md:rounded-2xl md:border md:border-vault-border/25 relative z-10 overflow-hidden flex flex-col transition-all duration-500">
+    <div
+      ref="tiltRef"
+      class="t-tilt console-card w-full h-full md:w-[720px] md:h-[90vh] md:max-h-[760px] md:rounded-2xl md:border md:border-vault-border/25 relative z-10 overflow-hidden"
+      :class="{ 'is-hover': tiltHover }"
+    >
+      <div
+        ref="cardRef"
+        class="t-tilt-card h-full flex flex-col"
+        :class="{ 'is-tilting': tiltTilting }"
+      >
+        <div class="t-tilt-glare"></div>
       <SpringToy v-if="config.setupDone" />
 
       <!-- ══════════ HEADER ══════════ -->
@@ -22,13 +32,19 @@
             {{ isZh ? 'EN' : '中' }}
           </button>
           <button @click="toggle" class="header-btn" :title="isDark ? t('toggleLight') : t('toggleDark')">
-            <svg v-if="isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="5"/>
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-            </svg>
-            <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-            </svg>
+            <div class="t-icon-swap" :data-state="isDark ? 'a' : 'b'">
+              <span class="t-icon" data-icon="a">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+              </span>
+              <span class="t-icon" data-icon="b">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                </svg>
+              </span>
+            </div>
           </button>
           <button @click="showHistory = true" class="header-btn" :title="t('salaryRecords')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -52,11 +68,11 @@
       <!-- ══════════ SETUP SCREEN ══════════ -->
       <Transition name="fade">
         <div v-if="!config.setupDone" class="flex-1 flex items-center justify-center relative z-10">
-          <div class="text-center max-w-xs px-6">
-            <div class="text-5xl mb-5 animate-float">💰</div>
-            <h1 class="font-display text-4xl gold-text mb-2">{{ t('paydayCountdown') }}</h1>
-            <p class="font-body text-vault-muted text-sm mb-7 leading-relaxed" v-html="t('landingDesc').replace('\n', '<br>')"></p>
-            <button @click="showSettings = true" class="btn-gold px-7 py-2.5 rounded-full font-body text-sm tracking-[0.2em]">
+          <div class="text-center max-w-xs px-6 t-stagger" :class="{ 'is-shown': setupTextShown }">
+            <div class="text-5xl mb-5 animate-float t-stagger-line t-stagger-line--1">💰</div>
+            <h1 class="font-display text-4xl gold-text mb-2 t-stagger-line t-stagger-line--2">{{ t('paydayCountdown') }}</h1>
+            <p class="font-body text-vault-muted text-sm mb-7 leading-relaxed t-stagger-line t-stagger-line--3" v-html="t('landingDesc').replace('\n', '<br>')"></p>
+            <button @click="showSettings = true" class="btn-gold px-7 py-2.5 rounded-full font-body text-sm tracking-[0.2em] t-stagger-line t-stagger-line--3">
               {{ t('startSetup') }}
             </button>
           </div>
@@ -76,15 +92,17 @@
             </div>
           </Transition>
 
-          <Transition name="mood-change" mode="out-in">
-            <div :key="localizedMood.level" class="text-center mb-5 md:mb-6 select-none">
-              <span class="text-2xl">{{ localizedMood.emoji }}</span>
-              <h2 class="font-display text-lg md:text-xl text-vault-text mt-1 tracking-wide">
-                {{ config.name ? `${config.name}${isZh ? '，' : ', '}` : '' }}{{ localizedMood.title }}
-              </h2>
-              <p class="font-body text-[11px] text-vault-muted/70 mt-0.5 italic">{{ localizedMood.message }}</p>
-            </div>
-          </Transition>
+          <div class="text-center mb-5 md:mb-6 select-none">
+            <span class="text-2xl inline-block transition-transform duration-300" :key="localizedMood.emoji">{{ localizedMood.emoji }}</span>
+            <h2 class="font-display text-lg md:text-xl text-vault-text mt-1 tracking-wide">
+              <TextSwap
+                :text="(config.name ? `${config.name}${isZh ? '，' : ', '}` : '') + localizedMood.title"
+              />
+            </h2>
+            <p class="font-body text-[11px] text-vault-muted/70 mt-0.5 italic">
+              <TextSwap :text="localizedMood.message" />
+            </p>
+          </div>
 
           <ProgressRing :progress="monthProgress" :size="ringSize" :stroke-width="5" :isDark="isDark">
             <div class="text-center">
@@ -156,31 +174,38 @@
           </span>
         </div>
       </footer>
+      </div>
     </div>
 
     <SetupModal :show="showSettings" :config="config" @close="showSettings = false" @save="handleSave" />
     <CompensationModal :show="showCompensation" :config="config" @close="showCompensation = false" />
 
     <Teleport to="body">
-      <Transition name="drawer">
-        <div v-if="showHistory" class="fixed inset-0 z-50 flex justify-end">
-          <div class="absolute inset-0 backdrop-blur-sm" :style="{ background: 'var(--v-overlay)' }" @click="showHistory = false"></div>
-          <div class="relative w-full max-w-sm flex flex-col animate-slide-in-right drawer-panel">
-            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-vault-gold/40 to-transparent"></div>
-            <div class="flex items-center justify-between px-5 py-4 border-b border-vault-border/30">
-              <h2 class="font-display text-lg text-vault-text">{{ t('salaryRecords') }}</h2>
-              <button @click="showHistory = false" class="text-vault-muted hover:text-vault-text transition-colors p-1">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-              </button>
-            </div>
-            <div class="flex-1 overflow-y-auto px-5 py-4">
-              <SalaryHistory :history="salaryHistory" :config="config" @add="recordSalary" @delete="deleteRecord" />
-            </div>
+      <div v-if="historyVisible" class="fixed inset-0 z-50 flex justify-end">
+        <div
+          class="absolute inset-0 backdrop-blur-sm t-modal-backdrop"
+          :class="{ 'is-open': historyOpen, 'is-closing': historyClosing }"
+          :style="{ background: 'var(--v-overlay)' }"
+          @click="showHistory = false"
+        ></div>
+        <div
+          class="relative w-full max-w-sm flex flex-col drawer-panel t-panel-slide-x"
+          :data-open="historyOpen && !historyClosing"
+        >
+          <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-vault-gold/40 to-transparent"></div>
+          <div class="flex items-center justify-between px-5 py-4 border-b border-vault-border/30">
+            <h2 class="font-display text-lg text-vault-text">{{ t('salaryRecords') }}</h2>
+            <button @click="showHistory = false" class="text-vault-muted hover:text-vault-text transition-colors p-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          <div class="flex-1 overflow-y-auto px-5 py-4">
+            <SalaryHistory :history="salaryHistory" :config="config" @add="recordSalary" @delete="deleteRecord" />
           </div>
         </div>
-      </Transition>
+      </div>
     </Teleport>
 
     <div v-if="isPayday" class="fixed inset-0 pointer-events-none z-20">
@@ -190,18 +215,21 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { usePayday } from './composables/usePayday.js'
 import { useHoliday } from './composables/useHoliday.js'
 import { useTheme } from './composables/useTheme.js'
 import { useI18n } from './composables/useI18n.js'
+import { useCardTilt } from './composables/useCardTilt.js'
+import { useModalTransition } from './composables/useModalTransition.js'
 import SpringToy from './components/SpringToy.vue'
 import CountdownBlock from './components/CountdownBlock.vue'
 import ProgressRing from './components/ProgressRing.vue'
 import SetupModal from './components/SetupModal.vue'
 import CompensationModal from './components/CompensationModal.vue'
 import SalaryHistory from './components/SalaryHistory.vue'
+import TextSwap from './components/TextSwap.vue'
 
 const {
   config, salaryHistory, now,
@@ -227,8 +255,14 @@ const localizedMood = computed(() => {
 
 const showSettings = ref(false)
 const showHistory = ref(false)
+const { visible: historyVisible, isOpen: historyOpen, isClosing: historyClosing } = useModalTransition(showHistory)
 const showCompensation = ref(false)
 const holidayReady = ref(false)
+const setupTextShown = ref(false)
+
+const tiltRef = ref(null)
+const cardRef = ref(null)
+const { isHover: tiltHover, isTilting: tiltTilting } = useCardTilt(tiltRef, cardRef)
 
 const { width: vw, height: vh } = useWindowSize()
 
@@ -245,6 +279,17 @@ onMounted(async () => {
   const year = new Date().getFullYear()
   await Promise.all([fetchYear(year), fetchYear(year + 1)])
   holidayReady.value = true
+  await nextTick()
+  setupTextShown.value = true
+})
+
+watch(() => config.value.setupDone, async (done) => {
+  if (!done) {
+    setupTextShown.value = false
+    await nextTick()
+    void document.querySelector('.t-stagger')?.offsetHeight
+    setupTextShown.value = true
+  }
 })
 
 const workingDaysThisMonth = computed(() => {
@@ -332,38 +377,10 @@ function confettiStyle(i) {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity var(--duration-slow) var(--ease-smooth-out), transform var(--duration-slow) var(--ease-smooth-out);
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
   transform: translateY(12px);
-}
-
-.mood-change-enter-active {
-  transition: all 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
-}
-.mood-change-leave-active {
-  transition: all 0.2s ease;
-}
-.mood-change-enter-from {
-  opacity: 0; transform: translateY(8px) scale(0.98);
-}
-.mood-change-leave-to {
-  opacity: 0; transform: translateY(-6px) scale(0.98);
-}
-
-.drawer-enter-active, .drawer-leave-active {
-  transition: opacity 0.3s ease;
-}
-.drawer-enter-from, .drawer-leave-to {
-  opacity: 0;
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-.animate-slide-in-right {
-  animation: slideInRight 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 </style>
