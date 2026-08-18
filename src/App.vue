@@ -9,12 +9,12 @@
     <!-- ══════════ THE CONSOLE ══════════ -->
     <div
       ref="tiltRef"
-      class="t-tilt console-card w-full h-full md:w-[720px] md:h-[90vh] md:max-h-[760px] md:rounded-2xl md:border md:border-vault-border/25 relative z-10 overflow-hidden"
+      class="t-tilt w-full h-full md:w-[720px] md:h-[90vh] md:max-h-[760px] relative z-10"
       :class="{ 'is-hover': tiltHover }"
     >
       <div
         ref="cardRef"
-        class="t-tilt-card h-full flex flex-col"
+        class="t-tilt-card console-card h-full w-full flex flex-col md:rounded-2xl md:border md:border-vault-border/25 overflow-hidden"
         :class="{ 'is-tilting': tiltTilting }"
       >
         <div class="t-tilt-glare"></div>
