@@ -5,7 +5,6 @@ const MAX_TILT = 12
 export function useCardTilt(tiltRef, cardRef) {
   const isHover = ref(false)
   const isTilting = ref(false)
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)')
 
   function reset() {
     const tilt = tiltRef.value
@@ -20,7 +19,7 @@ export function useCardTilt(tiltRef, cardRef) {
   function track(e) {
     const tilt = tiltRef.value
     const card = cardRef.value
-    if (!tilt || !card || reduce.matches) return
+    if (!tilt || !card) return
 
     const r = tilt.getBoundingClientRect()
     const px = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))
