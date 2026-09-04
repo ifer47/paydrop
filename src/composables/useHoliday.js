@@ -117,11 +117,26 @@ export function useHoliday() {
     return `${y}-${m}-${day}`
   }
 
+  /**
+   * 计算实际发薪日：若 nominal 日非工作日，则向前顺延到最近的工作日
+   * @param {number} year
+   * @param {number} month 0-indexed
+   * @param {number} payDay 每月几号
+   */
+  function getActualPayday(year, month, payDay) {
+    const d = new Date(year, month, payDay, 0, 0, 0, 0)
+    while (!isWorkDay(d)) {
+      d.setDate(d.getDate() - 1)
+    }
+    return d
+  }
+
   return {
     holidayMap,
     fetchYear,
     isWorkDay,
     getWorkingDays,
     countWorkingDaysBetween,
+    getActualPayday,
   }
 }

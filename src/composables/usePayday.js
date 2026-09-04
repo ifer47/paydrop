@@ -2,8 +2,14 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useHoliday } from './useHoliday.js'
 
+function startOfDay(date) {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
 export function usePayday() {
-  const { countWorkingDaysBetween } = useHoliday()
+  const { countWorkingDaysBetween, getActualPayday } = useHoliday()
   // 持久化配置
   const config = useLocalStorage('payday-config', {
     payDay: 15,           // 每月几号发薪
@@ -20,46 +26,41 @@ export function usePayday() {
   const now = ref(new Date())
   let timer = null
 
-  // 下一个发薪日计算
+  // 下一个发薪日计算（遇周末/节假日提前到最近工作日）
   const nextPayday = computed(() => {
-    const d = new Date(now.value)
-    const year = d.getFullYear()
-    const month = d.getMonth()
-    const day = d.getDate()
+    const today = startOfDay(now.value)
+    const year = today.getFullYear()
+    const month = today.getMonth()
     const payDay = parseInt(config.value.payDay) || 15
 
-    // 计算本月发薪日
-    const thisMonthPayday = new Date(year, month, payDay, 0, 0, 0, 0)
-    
-    // 如果本月发薪日还没到（今天不算），用本月的
-    if (thisMonthPayday > d) {
+    const thisMonthPayday = getActualPayday(year, month, payDay)
+
+    // 本月实际发薪日尚未过去（含当天）
+    if (thisMonthPayday >= today) {
       return thisMonthPayday
     }
-    
-    // 否则用下个月的
+
     const nextMonth = month === 11 ? 0 : month + 1
     const nextYear = month === 11 ? year + 1 : year
-    return new Date(nextYear, nextMonth, payDay, 0, 0, 0, 0)
+    return getActualPayday(nextYear, nextMonth, payDay)
   })
 
   // 上一个发薪日
   const lastPayday = computed(() => {
-    const d = new Date(now.value)
-    const year = d.getFullYear()
-    const month = d.getMonth()
-    const day = d.getDate()
+    const today = startOfDay(now.value)
+    const year = today.getFullYear()
+    const month = today.getMonth()
     const payDay = parseInt(config.value.payDay) || 15
 
-    const thisMonthPayday = new Date(year, month, payDay, 0, 0, 0, 0)
-    
-    if (thisMonthPayday <= d) {
+    const thisMonthPayday = getActualPayday(year, month, payDay)
+
+    if (today > thisMonthPayday) {
       return thisMonthPayday
     }
-    
-    // 上个月的发薪日
+
     const prevMonth = month === 0 ? 11 : month - 1
     const prevYear = month === 0 ? year - 1 : year
-    return new Date(prevYear, prevMonth, payDay, 0, 0, 0, 0)
+    return getActualPayday(prevYear, prevMonth, payDay)
   })
 
   // 倒计时（天数按剩余工作日计算，时分秒仍为距发薪日的实际时间）
